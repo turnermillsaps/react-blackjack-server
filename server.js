@@ -2,25 +2,29 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const db = require('./models');
-
 const PORT = process.env.PORT || 3001;
 
+// Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+// Routes
+// ** Test server
 app.get("/", (req, res, next) => {
     res.send("Server connected")
 })
 
-// Once server is listening, test db connection
-db.sequelize.authenticate()
+app.post("/api/getUser", (req, res, next) => {
+    
+})
+
+// Start server and test db connection 
+app.listen(PORT, () => {
+    db.sequelize.authenticate()
         .then(() => {
-            console.log('Connection established successfully');
+            console.log('Connection server established successfully');
         })
         .catch((err) => {
-            console.error('Unable to connect to database: ' + err);
-        }) 
-
-app.listen(PORT, () => {
-    console.log(`Server is listening on port ${PORT}`);
+            console.error(`Server is listening on port ${PORT} but no connection to db: ${err}`);
+        })
 })
