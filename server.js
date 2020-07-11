@@ -13,13 +13,14 @@ app.get("/", (req, res, next) => {
 })
 
 // Once server is listening, test db connection
-app.listen(PORT, () => {
-    console.log(`Server is listening on port ${PORT}`);
-    db.authenticate()
+db.sequelize.authenticate()
         .then(() => {
             console.log('Connection established successfully');
         })
         .catch((err) => {
             console.error('Unable to connect to database: ' + err);
         }) 
+
+app.listen(PORT, () => {
+    console.log(`Server is listening on port ${PORT}`);
 })
