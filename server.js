@@ -1,8 +1,9 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const db = require('./models');
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -11,6 +12,14 @@ app.get("/", (req, res, next) => {
     res.send("Server connected")
 })
 
+// Once server is listening, test db connection
 app.listen(PORT, () => {
-    console.log(`Server is listening on port ${PORT}`)
+    console.log(`Server is listening on port ${PORT}`);
+    db.authenticate()
+        .then(() => {
+            console.log('Connection established successfully');
+        })
+        .catch((err) => {
+            console.error('Unable to connect to database: ' + err);
+        }) 
 })
