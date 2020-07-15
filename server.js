@@ -27,13 +27,14 @@ app.get("/api/getUser", (req, res) => {
 
 // ** Create user if it does not already exist
 app.post("/api/createUser", (req, res) => {
-    if (!req.body.email || !req.body.name || !req.body.imageUrl) {
+    if (!req.body.email || !req.body.name || !req.body.imageUrl || !req.body.googleId) {
         res.json({ ...req.body, error: `Request does not contain all parameters needed.`})
     } else {
         db.user.create({
             email: req.body.email,
             name: req.body.name,
-            imageUrl: req.body.imageUrl
+            imageUrl: req.body.imageUrl,
+            googleId: req.body.googleId
         }).then(result => { res.json(result) })
           .catch(err => {
             console.error(err)
