@@ -9,36 +9,28 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Routes
-// ** Test server
+// ** Test express server
 app.get("/", (req, res) => {
     res.send("Server connected")
 })
 
-// ** Get user data from db
-app.get("/api/getUser", (req, res) => {
-    let userData = {}
-    db.user.findAll({ where: { email: req.body.email }})
-        .then(result => { res.json(result) })
-        .catch(err => {
-            console.error(err)
-            res.send('An error occurred while attempting to retrieve user.')
-        })
-})
-
-// ** Create user if it does not already exist
-app.post("/api/createUser", (req, res) => {
+// ** Create user if it does not already exist, otherwise return user data
+app.get("/api/findOrCreateUser", (req, res) => {
     if (!req.body.email || !req.body.name || !req.body.imageUrl || !req.body.googleId) {
         res.json({ ...req.body, error: `Request does not contain all parameters needed.`})
     } else {
-        db.user.create({
-            email: req.body.email,
-            name: req.body.name,
-            imageUrl: req.body.imageUrl,
-            googleId: req.body.googleId
+        db.user.findOrCreate({
+            where: { googleId: req.body.googleId },
+            defaults: {
+                email: req.body.email,
+                name: req.body.name,
+                imageUrl: req.body.imageUrl,
+                googleId: req.body.googleId
+            }
         }).then(result => { res.json(result) })
           .catch(err => {
-            console.error(err)
-            res.send('An error occurred while attempting to create user.')
+              console.error(err)
+              res.send('An error occurred while attempting to find or create user.')
           })
     }
 })
