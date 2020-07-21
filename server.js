@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Uncomment to set up whitelist for localhost testing
-const whitelist = ['http://localhost:3000']
+const whitelist = ['http://localhost:3000', 'https://react-blackjack-eta.vercel.app/']
 const corsOptions = {
     origin: (origin, callback) => {
         if (whitelist.indexOf(origin) !== -1) {
